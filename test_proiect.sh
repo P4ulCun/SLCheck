@@ -1,14 +1,20 @@
 #!/bin/bash
 
 # read DIR
-DIR="/home/paul/repos/SLCheck/folder_test"
+PATH=$1
 # citirea fiecarui element din fisierul dir
-for file in $DIR/*; do
+function rec_search(){
+    DIR=$1
+    for file in $DIR/*; do
     if [ -L "$file" ]; then
         echo "${file##*/} is a symlink"
     elif [ -f "$file" ]; then
         echo "${file##*/} is a file"
     elif [ -d "$file" ]; then
         echo "${file##*/} is directory"
+        rec_search $file
     fi
-done
+    done
+}
+
+rec_search $PATH
