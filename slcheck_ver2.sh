@@ -2,8 +2,9 @@
 
 PATH=$1
 FLAG=$2
+SYM_LINKS=()
 # verific daca flagul este unul valid
-if [ $FLAG != "" ] && [ $FLAG != "-follow-symlink" ]; then
+if [ "$FLAG" != "" ] && [ "$FLAG" != "-follow-symlink" ]; then
     echo "Did you want to use the flag: -follow-symlink?"
     exit 1
 fi
@@ -16,6 +17,18 @@ function rec_search(){
     # verific pentru fiecare item ce tip de file este
     if [ -L "$file" ]; then
     # verific daca file ul este un symlink
+
+	# verific daca symlink ul a mai aparut vreodata
+	value="\<${file##*/}\>"
+	# regex that matches the argument
+	if [[ ${SYM_LINKS[@]} =~ $value ]]; then
+	    # sym link already found, so skip
+	    continue
+	fi
+
+	# adaug symlinkul la array
+	SYM_LINKS+=( ${file##*/} )
+
         # verific daca symlink ul este broken
         if [[ -L "$file" ]] && [[ ! -e "$file" ]]; then
         # if [ este symlink ] si [ file doesn't exist ]
