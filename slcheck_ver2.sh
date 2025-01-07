@@ -32,7 +32,7 @@ function rec_search(){
         # verific daca symlink ul este broken
         if [[ -L "$file" ]] && [[ ! -e "$file" ]]; then
         # if [ este symlink ] si [ file doesn't exist ]
-            # echo "${file##*/} is a broken symlink"
+            echo "${file##*/} is a broken symlink"
             CNT_BRKN_SYM+=1
             continue
         fi
