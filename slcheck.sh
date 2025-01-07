@@ -2,6 +2,7 @@
 
 PATH=$1
 FLAG=$2
+SYM_LINKS=()
 # verific daca flagul este unul valid
 if [ "$FLAG" != "" ] && [ "$FLAG" != "-follow-symlinks" ]; then
     echo "Did you want to use the flag: -follow-symlinks?"
@@ -16,10 +17,22 @@ function rec_search(){
     # verific pentru fiecare item ce tip de file este
     if [ -L "$file" ]; then
     # verific daca file ul este un symlink
+
+	# verific daca symlink ul a mai aparut vreodata
+	value="\<${file##*/}\>"
+	# regex that matches the argument
+	if [[ ${SYM_LINKS[@]} =~ $value ]]; then
+	    # sym link already found, so skip
+	    continue
+	fi
+
+	# adaug symlinkul la array
+	SYM_LINKS+=( ${file##*/} )
+
         # verific daca symlink ul este broken
         if [[ -L "$file" ]] && [[ ! -e "$file" ]]; then
         # if [ este symlink ] si [ file doesn't exist ]
-            # echo "${file##*/} is a broken symlink"
+            echo "${file##*/} is a broken symlink"
             CNT_BRKN_SYM+=1
             continue
         fi
@@ -35,11 +48,9 @@ function rec_search(){
                 rec_search $file
             fi
         fi
-    
-    # if [ -f "$file" ]; then
+    # elif [ -f "$file" ]; then
     # verific daca file ul este un file
         # echo "${file##*/} is a file"
-    # fi
     elif [ -d "$file" ]; then
     # verific daca file ul este un directory
         # echo "${file##*/} is directory"
