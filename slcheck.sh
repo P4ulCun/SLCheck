@@ -4,6 +4,13 @@ PATH=$1
 FLAG=$2
 SYM_LINKS=()
 # verific daca flagul este unul valid
+if [ ! -d "$PATH" ]; then
+    echo "Directory doesn't exist!"
+    exit 1
+fi
+if [ "$PATH" == "" ]; then
+    exit 1
+fi
 if [ "$FLAG" != "" ] && [ "$FLAG" != "-follow-symlinks" ]; then
     echo "Did you want to use the flag: -follow-symlinks?"
     exit 1
