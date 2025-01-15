@@ -27,10 +27,8 @@ function rec_search(){
 
 	# verific daca symlink ul a mai aparut vreodata
 	value="\<${file##*/}\>"
-	# regex that matches the argument
-	if [[ ${SYM_LINKS[@]} =~ $value ]]; then
-	    # sym link already found, so skip
-	    continue
+		if [[ ${SYM_LINKS[@]} =~ $value ]]; then
+		    continue
 	fi
 
 	# adaug symlinkul la array
